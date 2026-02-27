@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title><center>Ela Boutique</center></title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#fdfdfd; padding-top: 70px;}
+
+    /* Header pastel */
+    header {
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(180, 61, 61, 0.5);
+        padding: 10px 20px;
+        position: fixed;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .menu-btn {
+        background: #d3a5e5;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1000;
+    }
+
+    .titulo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+    }
+
+    .logo {
+        height: 50px;
+        position: relative;
+    }
+
+    .dropdown {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 20px;
+        background: #cce7ff;
+        list-style: none;
+        padding: 0;
+        border-radius: 8px;
+    }
+
+    .dropdown li {
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    .dropdown li:hover {
+        background: #007bff;
+        color: white;
+    }
+
+    /* Banner pastel */
+    .banner {display: flex;justify-content: center;align-items: center;height: 60vh;overflow: hidden;position: relative;width: 100%;object-fit: cover;z-index: 1;}
+    .banner img {position: absolute;width: 100%;height: 100%;object-fit: cover;transform: translateX(100%);transition: transform 1s cubic-bezier(.77, 0, .18, 1);}
+    .banner img.active {transform: translateX(0);}
+    .banner img.prev {transform: translateX(-100%);}
+
+    /* Menú horizontal pastel */
+    .menu {position: fixed; width: 100%; z-index: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        display: flex;justify-content: center;background: rgba(180, 61, 61, 0.5); ;gap: 20px;padding: 15px;}
+    .menu div {padding: 15px 25px;cursor: pointer;background: #ffd6d6;border-radius: 8px; transition: all 0.3s ease;}
+    .menu div:hover {background: #007bff;color: white; transform: scale(1.12);transition: 0.3s ease;}
+    .menu-btn {position: relative;z-index: 1100;}
+
+    /* Productos pastel */
+    .productos { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; padding:20px; }
+    .producto { border:1px solid #ddd; padding:10px; text-align:center; background:#f9f9f9; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    .producto img { width:100%; height:250px; object-fit: cover; border-radius: 8px;}
+
+
+    .estado { font-weight:bold; color:#1240d4; background:#23dbdb; padding:5px; border-radius:5px; }
+    .estado_R { font-weight:bold; color:#555; background:#000000; padding:5px; border-radius:5px; }
+    .estado_V { font-weight:bold; color:#a70d0d; background:#e7748d; padding:5px; border-radius:5px; }
+    .cantidad { display:flex; justify-content:center; align-items:center; gap:10px; margin-top:10px; }
+    .cantidad button { padding:5px 10px; background:#d6f5ff; border:none; border-radius:5px; cursor:pointer; }
+    .cantidad button:hover { background:#b3ecff; }
+
+    /* Footer pastel */
+    footer { background:#a3d5ff; color:#333; text-align:center; padding:20px; margin-top:20px; }
+    footer a { color:#333; margin:0 10px; text-decoration:none; }
+    footer a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <button class="menu-btn" onclick="toggleMenu()">☰ Opciones</button>
+
+  <h1 class="titulo">Mi Empresa</h1>
+
+  <img class="logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsb4-J7kL41BhVJ5pi3HzUUyoq-yAzlkjEtg&s" alt="Logo">
+
+  <ul id="menu" class="dropdown">
+    <li>Inicio</li>
+    <li>Productos</li>
+    <li>Promociones</li>
+    <li>Contacto</li>
+    <li>Ayuda</li>
+  </ul>
+</header>
+
+<!-- Banner -->
+<div class="banner" id="banner">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjYwF9QC42bWvQPq1nhfnQiDnmfxOyNwQpEA&s" class="active" alt="Producto 1">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb0xGMcHOXk1Q5yTWZH-mIqflnIgSacdygiQ&s" alt="Producto 2">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTl1Am_71QWWYNKtQa1DCmjoCs_nPWTbdmYJQ&s" alt="Producto 3">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpbjO6fKcRns_oYaIurSe7ON29kOFZXaZRrw&s" alt="Producto 4">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSW9PqZfSy48sAQjxKjHhCTy0bvISZYsD6tHQ&s" alt="Producto 5">
+</div>
+
+<!-- Menú horizontal -->
+<div class="menu">
+  <div onclick="mostrarSegmento(1)">Segmento 1</div>
+  <div onclick="mostrarSegmento(2)">Segmento 2</div>
+  <div>Segmento 3</div>
+  <div>Segmento 4</div>
+  <div>Segmento 5</div>
+</div>
+
+<!-- Productos -->
+<div id="productos1" class="productos">
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado_R">Reservado</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado_V">Vendido</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://i.pinimg.com/originals/c9/c6/fc/c9c6fcf68504eb3a9627de6c13497647.jpg" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+</div>
+
+<div id="productos2" class="productos" style="display: none;">
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+    <div class="producto">
+        <img src="https://venzhop.com/cdn/shop/products/Disenosintitulo-2022-05-07T200034.857.png?v=1688258264" alt="Prod1">
+        <p>Producto 1</p>
+        <p>$ 50.000</p>
+        <p class="estado">Disponible</p>
+        <div class="cantidad">
+            <button onclick="cambiarCantidad(this,-1)">-</button>
+            <span>0</span>
+            <button onclick="cambiarCantidad(this,1)">+</button>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 Mi Empresa - NIT: 123456789</p>
+  <p>Tel: +57 300 000 0000</p>
+  <p>
+    <a href="#">Facebook</a> |
+    <a href="#">Instagram</a> |
+    <a href="#">Twitter</a>
+  </p>
+</footer>
+
+<script>
+  // Menú desplegable
+  function toggleMenu() {
+    const menu = document.getElementById("menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  }
+
+  // Banner automático
+  let index = 0;
+  const slides = document.querySelectorAll("#banner img");
+  setInterval(() => {
+    slides[index].classList.remove("active");
+    index = (index + 1) % slides.length;
+    slides[index].classList.add("active");
+  }, 3000);
+
+  // Cantidades
+  function cambiarCantidad(btn, delta) {
+    const span = btn.parentNode.querySelector("span");
+    let valor = parseInt(span.textContent);
+    valor = Math.max(0, valor + delta);
+    span.textContent = valor;
+  }
+
+  // Modificación section
+  function mostrarSegmento(numero) {
+    const p1 = document.getElementById("productos1");
+    const p2 = document.getElementById("productos2");
+
+    if (numero === 1) {
+        p1.style.display = "grid";
+        p2.style.display = "none";
+    } else {
+        p1.style.display = "none";
+        p2.style.display = "grid";
+    }
+    }
+</script>
+
+</body>
+</html>
